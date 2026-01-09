@@ -1,33 +1,62 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Platform } from 'react-native';
+// Usamos Ionicons que viene instalado por defecto en Expo
+import { Ionicons } from '@expo/vector-icons';
+// Ruta relativa corregida para el hook de color
+import { useColorScheme } from '../../hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  // Definimos colores aquí mismo para evitar errores de importación
+  const activeColor = colorScheme === 'dark' ? '#4ade80' : '#1e3a8a'; // Verde neón o Azul oscuro
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: activeColor,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarStyle: Platform.select({
+          ios: {
+            position: 'absolute',
+          },
+          default: {},
+        }),
       }}>
+
+      {/* 1. HOME (Tabla) */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Tabla',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="list" color={color} />,
         }}
       />
+
+      {/* 2. GOLEADORES */}
       <Tabs.Screen
-        name="explore"
+        name="goleadores"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Goleadores',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="football" color={color} />,
+        }}
+      />
+
+      {/* 3. ADMIN (Planilla) */}
+      <Tabs.Screen
+        name="admin"
+        options={{
+          title: 'Planilla',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="create" color={color} />,
+        }}
+      />
+
+      {/* 4. GESTIÓN (Crear cosas) */}
+      <Tabs.Screen
+        name="gestion"
+        options={{
+          title: 'Gestión',
+          tabBarIcon: ({ color }) => <Ionicons size={24} name="settings" color={color} />,
         }}
       />
     </Tabs>
